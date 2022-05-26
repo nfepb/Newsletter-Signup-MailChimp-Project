@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/signup.html")
 });
 
-app.post("/", (req, res) => {
+app.post("/", async (req, res) => {
   const firstName = req.body.fName;
   const lastName = req.body.lName;
   const email = req.body.email;
@@ -34,9 +34,9 @@ app.post("/", (req, res) => {
   }
 
   //Uploading the data to the server
-  const run = async () => {
     try {
-      const response = await client.list.addListMember(listId, {
+      // console.log(client);
+      const response = await client.lists.addListMember(listId, {
         email_address: subscribingUser.email,
         status: "subscribed",
         merge_fields: {
@@ -44,14 +44,13 @@ app.post("/", (req, res) => {
           LNAME: subscribingUser.lastName
         }
       })
-      console.log(response)
+      // console.log(e)
       res.sendFile(__dirname + "/success.html");
     } catch(e) {
+      console.log(e);
       res.sendFile(__dirname + "/failure.html");
     }
-  };
 
-  run();
 });
 
 // Redirect to the home directory if user clicks on failure button
